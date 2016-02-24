@@ -9,7 +9,7 @@ from pandas import DataFrame
 
 def connectTor():
   ## Connect to Tor for privacy purposes
-     socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 9150, True)
+     socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 9050, True)
      socket.socket = socks.socksocket
      print "connected to Tor!"
 
@@ -170,6 +170,7 @@ def parse_and_write_data(soup, date, time, not_ML = True):
             team_A = 'Milwaukee'            
        # A.append(str(date) + '_' + team_A.replace(u'\xa0',' ') + '_' + team_H.replace(u'\xa0',' '))
         A.append(date)
+        time = soup.find_all('div', attrs = {'class':'el-div eventLine-time'})[i].find_all('div')[0].get_text().strip()
         A.append(time)
         A.append('away')
         A.append(team_A)
@@ -289,7 +290,7 @@ def select_and_rename(df, text):
     
 
 def main():
-    connectTor()
+    #connectTor()
 
     ## Get today's lines
     todays_date = str(date.today()).replace('-','')
@@ -353,7 +354,7 @@ def main():
     # write_df = write_df.merge(
                 # df_1h_tot, how='left', on = ['key','team','pitcher','hand','opp_team'])
     
-    with open('\SBR_NBA_Lines.csv', 'a') as f:
+    with open('NBA_Lines.csv', 'a') as f:
         write_df.to_csv(f, index=False)#, header = False)
   
     ## Code to pull tomorrow's data --- work in progress
